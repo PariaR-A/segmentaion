@@ -111,8 +111,7 @@ def inference(args, model, test_save_path=None):
         logging.info('Mean class %d mean_dice %f mean_hd95 %f' % (i, metric_list[i - 1][0], metric_list[i - 1][1]))
     performance = np.mean(metric_list, axis=0)[0]
     mean_hd95 = np.mean(metric_list, axis=0)[1]
-    print(metric_list, axis=0)
-    print(metric_list, axis=0)
+    print("metric_list:", metric_list)
 
     logging.info('Testing performance in best val model: mean_dice : %f mean_hd95 : %f' % (performance, mean_hd95))
     return "Testing Finished!"

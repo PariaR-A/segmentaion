@@ -103,8 +103,12 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
 
         #展示分割效果
         # 创建一个新的NumPy数组来存储结果
-        result_pred = rearrange(result,'c h w -> h w c')
-        result_label = rearrange(result, 'c h w -> h w c')
+        result_pred = np.zeros((512, 512, 3), dtype=np.uint8)
+        result_label = np.zeros((512, 512, 3), dtype=np.uint8)
+
+        result_pred[prediction == 1] = [255, 0, 0]
+        result_label[label == 1] = [255, 0, 0]
+
         print(result.shape)
         print(prediction.shape)
         for i in range(512):
@@ -119,9 +123,11 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
 
         filename, extension = os.path.splitext(case)
         print(os.path.join('pred_image',filename))
-        plt.imsave(os.path.join('pred_image',filename)+'.png', result_pred/255, cmap='jet')
+        plt.imsave(os.path.join('pred_image', filename) + '.png', result_pred)
+        plt.imsave(os.path.join('label_image', filename) + '.png', result_label)
+        # plt.imsave(os.path.join('pred_image',filename)+'.png', result_pred/255, cmap='jet')
         print(os.path.join('label_image',filename))
-        plt.imsave(os.path.join('label_image',filename)+'.png', result_label/255, cmap='jet')
+        # plt.imsave(os.path.join('label_image',filename)+'.png', result_label/255, cmap='jet')
         print(prediction.shape)
         print(label.shape)
         print('dice:'+str(dice_coefficient(prediction,label)))

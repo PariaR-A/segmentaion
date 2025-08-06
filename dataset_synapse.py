@@ -1,3 +1,5 @@
+# dataset_synapse.py
+
 import os
 import random
 import h5py
@@ -65,7 +67,11 @@ class Synapse_dataset(Dataset):
         image, label = data['image'], data['label']
 
         if image.ndim == 2:
-            image = np.expand_dims(image, axis=-1)
+            image = np.expand_dims(image, axis=0)  # [1, H, W]
+        elif image.ndim == 3 and image.shape[-1] == 1:
+            image = np.transpose(image, (2, 0, 1))  # [1, H, W]
+        elif image.ndim == 3 and image.shape[-1] == 3:
+            image = np.transpose(image, (2, 0, 1))  # [3, H, W]
 
         sample = {'image': image, 'label': label}
         if self.transform:
